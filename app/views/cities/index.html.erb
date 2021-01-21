@@ -1,0 +1,7 @@
+<h1 class="text-3xl font-bold mb-5">AQI Lookup</h1>
+<%= form_with model:@city, local:true do |f| %>
+  <%= f.label :city_name, class: "font-light block mb-2" %>
+  <%= f.text_field :cityname, class: "border border-gray-300 px-3 py-1 font-light" %>
+
+  <%= f.submit "Search", class: "px-3 py-1 bg-blue-800 text-white font-light shadow-md" %>
+<% end %>
