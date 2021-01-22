@@ -54,3 +54,7 @@ gem "tailwindcss-rails", "~> 0.3.0"
 gem "http"
 
 gem "figaro"
+
+gem "chartkick"
+
+gem "groupdate"

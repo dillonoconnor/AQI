@@ -7,29 +7,29 @@ class CitiesController < ApplicationController
     city_name = params[:city][:cityname]
     city = City.where("name LIKE ?", "%#{city_name}%").first
     if city && city.recent?
-      return redirect_to city
+      redirect_to city
     else
       fetch(city_name)
-      new_city = City.new(
+      new_city = City.create!(
         name: city_struct.name,
         aqi: city_struct.aqi,
         aqi_date: city_struct.aqi_time
       )
-      city_struct.pm25_forecast.each_with_index do |day, index|
-        new_city["pm25_forecast#{index + 1}"] = day["avg"]
-        new_city["pm25_forecast#{index + 1}_date"] = day["day"]
+      city_struct.pm25_forecast.each do |sample|
+        new_city.measurements.create!(
+          measurement_date: sample["day"],
+          pm25_avg: sample["avg"],
+          pm25_min: sample["min"],
+          pm25_max: sample["max"]
+        )
       end
-      if new_city.save
-        redirect_to new_city
-      else
-        flash.now[:alert] = "An error occured with your request."
-        render :index
-      end
+      redirect_to new_city
     end
   end
 
   def show
     @city = City.find(params[:id])
+    @forecasts = @city.measurements
   end
 
   private

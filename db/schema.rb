@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_023457) do
+ActiveRecord::Schema.define(version: 2021_01_22_184545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,26 +19,21 @@ ActiveRecord::Schema.define(version: 2021_01_21_023457) do
     t.string "name"
     t.integer "aqi"
     t.datetime "aqi_date"
-    t.integer "pm25_forecast1"
-    t.date "pm25_forecast1_date"
-    t.integer "pm25_forecast2"
-    t.date "pm25_forecast2_date"
-    t.integer "pm25_forecast3"
-    t.date "pm25_forecast3_date"
-    t.integer "pm25_forecast4"
-    t.date "pm25_forecast4_date"
-    t.integer "pm25_forecast5"
-    t.date "pm25_forecast5_date"
-    t.integer "pm25_forecast6"
-    t.date "pm25_forecast6_date"
-    t.integer "pm25_forecast7"
-    t.date "pm25_forecast7_date"
-    t.integer "pm25_forecast8"
-    t.date "pm25_forecast8_date"
-    t.integer "pm25_forecast9"
-    t.date "pm25_forecast9_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "measurements", force: :cascade do |t|
+    t.date "measurement_date"
+    t.integer "pm25_latest"
+    t.integer "pm25_avg"
+    t.integer "pm25_min"
+    t.integer "pm25_max"
+    t.bigint "city_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["city_id"], name: "index_measurements_on_city_id"
+  end
+
+  add_foreign_key "measurements", "cities"
 end

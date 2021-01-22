@@ -1,4 +1,4 @@
-<article class="bg-gray-200 shadow-md w-1/3 p-5 rounded-md">
+<article class="bg-gray-200 shadow-md w-full p-5 rounded-md">
   <h1 class="text-5xl font-bold mb-3"><%= @city.name %></h1>
   <div class="flex items-end">
     <%= content_tag(:h2, "AQI: #{@city.aqi}", class: "#{aqi_font_color(@city.aqi)} text-4xl") %>
@@ -6,27 +6,8 @@
   </div>
   <hr class="my-3 border-solid border-gray-400">
   <h4 class="text-lg font-light mb-3">Forecast</h4>
-  <p><%= friendly_time(@city.pm25_forecast1_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast1}", class: aqi_font_color(@city.pm25_forecast1)) %>
-
-  <%= friendly_time(@city.pm25_forecast2_date) %>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast2}", class: aqi_font_color(@city.pm25_forecast2)) %>
-  
-  <p><%= friendly_time(@city.pm25_forecast3_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast3}", class: aqi_font_color(@city.pm25_forecast3)) %>
-  
-  <p><%= friendly_time(@city.pm25_forecast4_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast4}", class: aqi_font_color(@city.pm25_forecast4)) %>
-  
-  <p><%= friendly_time(@city.pm25_forecast5_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast5}", class: aqi_font_color(@city.pm25_forecast5)) %>
-  
-  <p><%= friendly_time(@city.pm25_forecast6_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast6}", class: aqi_font_color(@city.pm25_forecast6)) %>
-  
-  <p><%= friendly_time(@city.pm25_forecast7_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast7}", class: aqi_font_color(@city.pm25_forecast7)) %>
-  
-  <p><%= friendly_time(@city.pm25_forecast8_date) %></p>
-  <%= content_tag(:p, "AQI: #{@city.pm25_forecast8}", class: aqi_font_color(@city.pm25_forecast8)) %>
+  <% @forecasts.each do |f| %>
+      <p><%= friendly_time(f.measurement_date) %></p>
+      <%= content_tag(:p, "AQI: #{f.pm25_avg}", class: aqi_font_color(f.pm25_avg)) %>
+  <% end %>
 </article>

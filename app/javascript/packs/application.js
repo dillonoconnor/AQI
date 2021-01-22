@@ -13,3 +13,5 @@ Turbolinks.start()
 ActiveStorage.start()
 
 require("stylesheets/application.scss")
+require("chartkick")
+require("chart.js")
