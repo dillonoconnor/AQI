@@ -1,8 +1,10 @@
-<article class="shadow-md w-1/3 p-2">
+<article class="bg-gray-200 shadow-md w-1/3 p-5 rounded-md">
   <h1 class="text-5xl font-bold mb-3"><%= @city.name %></h1>
-  <h2 class="text-3xl font-bold inline">AQI: <%= @city.aqi %></h2>
-  <h3 class="text-xl italic inline">:: <%= @city.aqi_date %> ::</h3>
-  <hr class="my-3">
+  <div class="flex items-end">
+    <%= content_tag(:h2, "AQI: #{@city.aqi}", class: "#{aqi_font_color(@city.aqi)} text-4xl") %>
+    <p class="text-md italic ml-2 text-gray-400"> as of <%= time_ago_in_words(@city.aqi_date) %> ago</p>
+  </div>
+  <hr class="my-3 border-solid border-gray-400">
   <h4 class="text-lg font-light mb-3">Forecast</h4>
   <p><%= friendly_time(@city.pm25_forecast1_date) %></p>
   <%= content_tag(:p, "AQI: #{@city.pm25_forecast1}", class: aqi_font_color(@city.pm25_forecast1)) %>
