@@ -1,4 +1,5 @@
 class CitiesController < ApplicationController
+
   def index
     @city = City.new
   end
@@ -31,7 +32,7 @@ class CitiesController < ApplicationController
   end
 
   def show
-    @city = City.find(params[:id])
+    @city = City.find_by(slug: params[:id])
     @forecasts = @city.measurements
   end
 
