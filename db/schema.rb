@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_22_184545) do
+ActiveRecord::Schema.define(version: 2021_01_23_184843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 2021_01_22_184545) do
 
   create_table "measurements", force: :cascade do |t|
     t.date "measurement_date"
-    t.integer "pm25_latest"
     t.integer "pm25_avg"
     t.integer "pm25_min"
     t.integer "pm25_max"

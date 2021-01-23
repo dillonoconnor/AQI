@@ -9,6 +9,9 @@ class CitiesController < ApplicationController
     if city && city.recent?
       redirect_to city
     else
+      if city
+        city.destroy
+      end
       fetch(city_name)
       new_city = City.create!(
         name: city_struct.name,

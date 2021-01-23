@@ -1,13 +1,36 @@
-<article class="bg-gray-200 shadow-md w-full p-5 rounded-md">
+<section class="bg-gray-200 shadow-md w-full p-5 rounded-md">
   <h1 class="text-5xl font-bold mb-3"><%= @city.name %></h1>
   <div class="flex items-end">
     <%= content_tag(:h2, "AQI: #{@city.aqi}", class: "#{aqi_font_color(@city.aqi)} text-4xl") %>
     <p class="text-md italic ml-2 text-gray-400"> as of <%= time_ago_in_words(@city.aqi_date) %> ago</p>
   </div>
   <hr class="my-3 border-solid border-gray-400">
-  <h4 class="text-lg font-light mb-3">Forecast</h4>
-  <% @forecasts.each do |f| %>
-      <p><%= friendly_time(f.measurement_date) %></p>
-      <%= content_tag(:p, "AQI: #{f.pm25_avg}", class: aqi_font_color(f.pm25_avg)) %>
-  <% end %>
-</article>
+  <article>
+      <h4 class="text-lg font-light mb-3">PM2.5 Forecast</h4>
+      <table class="table-auto w-full text-center my-5">
+        <thead>
+          <tr>
+            <% @forecasts.pluck(:measurement_date).each do |date| %>
+              <th class="font-normal"><%= friendly_time(date) %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tr>
+          <% @forecasts.each do |f| %>
+            <%= content_tag(:td, f.pm25_avg, class: aqi_font_color(f.pm25_avg)) %>
+          <% end %>
+        </tr>
+      </table>
+      <figure class="mb-3">
+        <%= area_chart Measurement.pluck(:measurement_date, :pm25_avg), xtitle: "Date", ytitle: "PM2.5 Average", 
+            label: "PM2.5", title: "PM2.5 Daily Average" %>
+      </figure>
+      <figure>
+        <%= column_chart [
+          { name: "PM2.5 Maximum", data: Measurement.group_by_day(:measurement_date, format: "%b %d").sum(:pm25_max) },
+          { name: "PM2.5 Minimum", data: Measurement.group_by_day(:measurement_date, format: "%b %d").sum(:pm25_min) }
+        ], xtitle: "Date", ytitle: "PM2.5 Level", title: "PM2.5 Min-Max" %>
+      </figure>
+
+  </article>
+</section>
