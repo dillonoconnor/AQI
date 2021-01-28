@@ -2,6 +2,9 @@ class CitiesController < ApplicationController
 
   def index
     @city = City.new
+    if params[:city]
+      @city_matches = params[:city]
+    end
   end
 
   def create
@@ -13,21 +16,24 @@ class CitiesController < ApplicationController
       if city
         city.destroy
       end
-      fetch(city_name)
-      new_city = City.create!(
-        name: city_struct.name,
-        aqi: city_struct.aqi,
-        aqi_date: city_struct.aqi_time
-      )
-      city_struct.pm25_forecast.each do |sample|
-        new_city.measurements.create!(
-          measurement_date: sample["day"],
-          pm25_avg: sample["avg"],
-          pm25_min: sample["min"],
-          pm25_max: sample["max"]
+      if fetch(city_name) == "Unknown station"
+        redirect_to root_url, alert: "Error: Unknown Station"
+      else
+        new_city = City.create!(
+          name: city_struct.name,
+          aqi: city_struct.aqi,
+          aqi_date: city_struct.aqi_time
         )
+        city_struct.pm25_forecast.each do |sample|
+          new_city.measurements.create!(
+            measurement_date: sample["day"],
+            pm25_avg: sample["avg"],
+            pm25_min: sample["min"],
+            pm25_max: sample["max"]
+          )
+        end
+        redirect_to new_city
       end
-      redirect_to new_city
     end
   end
 
@@ -40,6 +46,9 @@ class CitiesController < ApplicationController
 
     def fetch(city_name)
       city_data = City.fetch_aqi(city_name)
+      if city_data == "Unknown station"
+        return "Unknown station"
+      end
       cityAQI = Struct.new(:name, :aqi, :aqi_time, :pm25_forecast)
       @city_struct = cityAQI.new(city_data["city"]["name"], city_data["aqi"], 
                      city_data["time"]["s"], city_data["forecast"]["daily"]["pm25"])

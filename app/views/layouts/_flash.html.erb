@@ -1,0 +1,10 @@
+<% if flash.any? %>
+  <% flash.each do |name, msg| %>
+    <% case name.to_sym %>
+      <% when :notice %>
+        <%= content_tag :div, msg, class: "" %>
+      <% when :alert %>
+        <%= content_tag :div, msg, class: "position absolute top-0 left-0 w-auto p-2 h-auto bg-red-600 text-white" %>
+    <% end %>
+  <% end %>
+<% end %>
