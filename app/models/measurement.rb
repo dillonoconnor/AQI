@@ -1,3 +1,3 @@
 class Measurement < ApplicationRecord
-  belongs_to :city
+  belongs_to :station
 end

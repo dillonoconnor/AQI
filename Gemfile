@@ -67,3 +67,5 @@ gem "figaro"
 gem "chartkick"
 
 gem "groupdate"
+
+gem 'nokogiri', '~> 1.11', '>= 1.11.1'

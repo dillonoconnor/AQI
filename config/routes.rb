@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root "cities#index"
-  resources :cities
+  root "stations#index"
+  resources :stations
 end

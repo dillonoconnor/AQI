@@ -6,7 +6,7 @@ class CreateMeasurements < ActiveRecord::Migration[6.1]
       t.integer :pm25_avg
       t.integer :pm25_min
       t.integer :pm25_max
-      t.references :city, null: false, foreign_key: true
+      t.references :station, null: false, foreign_key: true
 
       t.timestamps
     end

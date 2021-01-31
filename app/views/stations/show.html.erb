@@ -1,10 +1,10 @@
 <section class="bg-gray-200 shadow-md w-full p-5 rounded-md">
   <div class="flex flex-wrap justify-between items-start">
-    <h1 class="text-5xl font-bold mb-3 w-4/5"><%= @city.name %></h1>
+    <h1 class="text-5xl font-bold mb-3 w-4/5"><%= @station.name %></h1>
     <%= link_to "New Search", root_path, class: "px-3 py-1 bg-blue-800 text-white font-light shadow-md" %>
     <div class="w-full flex items-end">
-      <%= content_tag(:h2, "AQI: #{@city.aqi}", class: "#{aqi_font_color(@city.aqi)} text-4xl") %>
-      <p class="text-md italic ml-2 text-gray-400"> as of <%= time_ago_in_words(@city.aqi_date) %> ago</p>
+      <%= content_tag(:h2, "AQI: #{@station.aqi}", class: "#{aqi_font_color(@station.aqi)} text-4xl") %>
+      <p class="text-md italic ml-2 text-gray-400"> as of <%= time_ago_in_words(@station.aqi_date) %> ago</p>
     </div>
   </div>
   <hr class="my-3 border-solid border-gray-400">

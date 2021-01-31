@@ -10,30 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_23_192202) do
+ActiveRecord::Schema.define(version: 2021_01_28_193745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "cities", force: :cascade do |t|
-    t.string "name"
-    t.integer "aqi"
-    t.datetime "aqi_date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "slug"
-  end
 
   create_table "measurements", force: :cascade do |t|
     t.date "measurement_date"
     t.integer "pm25_avg"
     t.integer "pm25_min"
     t.integer "pm25_max"
-    t.bigint "city_id", null: false
+    t.bigint "station_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["city_id"], name: "index_measurements_on_city_id"
+    t.index ["station_id"], name: "index_measurements_on_station_id"
   end
 
-  add_foreign_key "measurements", "cities"
+  create_table "states", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "stations", force: :cascade do |t|
+    t.string "station_name"
+    t.integer "aqi"
+    t.datetime "aqi_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "slug"
+    t.bigint "state_id", null: false
+    t.index ["state_id"], name: "index_stations_on_state_id"
+  end
+
+  add_foreign_key "measurements", "stations"
+  add_foreign_key "stations", "states"
 end
