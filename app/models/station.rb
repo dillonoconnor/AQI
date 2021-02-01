@@ -2,16 +2,59 @@ class Station < ApplicationRecord
 
   belongs_to :state
   has_many :measurements
-  validates :station_name, presence: true
   before_create :set_slug
 
-  def self.fetch_aqi(station)
+  def self.retrieve_attributes(station)
+
+    parsed_aqi_data = Struct.new(:idx, :aqi, :time, :time_s, :time_tz, :city, :city_name, :city_geo, :city_url,
+                              :attributions, :iaqi, :iaqi_pm25, :iaqi_pm25_v, :forecast, :forecast_daily,
+                              :forecast_daily_pm25, :forecast_daily_pmp10, :forecast_daily_o3,
+                              :forecast_daily_uvi)
+
     response = HTTP.get("https://api.waqi.info/feed/#{station}/?token=#{ENV["AQI_TOKEN"]}")
-    JSON.parse(response)["data"]
+    json = JSON.parse(response)["data"]
+
+    if json == "Unknown station"
+      "Unknown station"
+    else
+      parsed_aqi_data.new(
+        json["idx"],
+        json["aqi"],
+        json["time"],
+        json["time"]["s"],
+        json["time"]["tz"],
+        json["city"],
+        json["city"]["name"],
+        json["city"]["geo"],
+        json["city"]["url"],
+        json["attributions"],
+        json["iaqi"],
+        json["iaqi"]["pm25"],
+        json["iaqi"]["pm25"]["v"],
+        json["forecast"],
+        json["forecast"]["daily"],
+        json["forecast"]["daily"]["pm25"],
+        json["forecast"]["daily"]["pmp10"],
+        json["forecast"]["daily"]["o3"],
+        json["forecast"]["daily"]["uvi"]
+      )
+    end
   end
 
   def recent?
     created_at >= 1.day.ago
+  end
+
+  def self.active_listing(station_name)
+    Station.where("station_name LIKE ?", "%#{station_name}%").first
+  end
+
+  def needs_refresh?
+    recent? && measurements.any? ? false : true
+  end
+
+  def has_existing_measurement(sample)
+    measurements.pluck(:measurement_date).include?(sample["day"].to_date)
   end
 
   def to_param

@@ -6,7 +6,7 @@
     <%= f.text_field :station_name, class: "px-3 py-1 font-light", autofocus: true %>
 
     <%= f.label :station_select, "Not sure?  Select a station", class: "font-light block mt-8 mb-2 text-white" %>
-    <%= grouped_collection_select :station, :station_name, @states, :stations, :name, :id, :station_name, {}, 
+    <%= grouped_collection_select :station, :station_name, @states, :stations, :name, :station_name, :station_name, {}, 
                           {class: "bg-white font-light px-3 py-1"} %>
 
     <%= f.submit "Search", class: "mt-5 px-3 py-1 bg-blue-800 text-white font-light shadow-md" %>
