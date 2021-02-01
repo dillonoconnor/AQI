@@ -7,11 +7,12 @@ class Station < ApplicationRecord
   def self.retrieve_attributes(station)
 
     parsed_aqi_data = Struct.new(:idx, :aqi, :time, :time_s, :time_tz, :city, :city_name, :city_geo, :city_url,
-                              :attributions, :iaqi, :iaqi_pm25, :iaqi_pm25_v, :forecast, :forecast_daily,
+                              :attributions, :iaqi, :iaqi_pm25, :forecast, :forecast_daily,
                               :forecast_daily_pm25, :forecast_daily_pmp10, :forecast_daily_o3,
                               :forecast_daily_uvi)
 
-    before_response = HTTP.get("http://api.waqi.info/search/?token=#{ENV["AQI_TOKEN"]}&keyword=#{station}")
+    station_reformed = CGI::escape(station.split(", ").join(" "))
+    before_response = HTTP.get("http://api.waqi.info/search/?token=#{ENV["AQI_TOKEN"]}&keyword=#{station_reformed}")
     station_uid = JSON.parse(before_response)["data"][0]["uid"]
 
     response = HTTP.get("https://api.waqi.info/feed/@#{station_uid}/?token=#{ENV["AQI_TOKEN"]}")
@@ -19,6 +20,8 @@ class Station < ApplicationRecord
 
     if json == "Unknown station"
       "Unknown station"
+    elsif json["aqi"] == '-'
+      "Not reporting"
     else
       parsed_aqi_data.new(
         json["idx"],
@@ -33,7 +36,6 @@ class Station < ApplicationRecord
         json["attributions"],
         json["iaqi"],
         json["iaqi"]["pm25"],
-        json["iaqi"]["pm25"]["v"],
         json["forecast"],
         json["forecast"]["daily"],
         json["forecast"]["daily"]["pm25"],

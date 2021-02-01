@@ -16,6 +16,8 @@ class StationsController < ApplicationController
 
     if station_attributes == "Unknown station"
       return redirect_to root_url, alert: "Error: Unknown Station"
+    elsif station_attributes == "Not reporting"
+      return redirect_to root_url, alert: "This station doesn't seem to be reporting"
     end
 
     if station && station.needs_refresh?
