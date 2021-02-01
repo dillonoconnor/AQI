@@ -11,7 +11,10 @@ class Station < ApplicationRecord
                               :forecast_daily_pm25, :forecast_daily_pmp10, :forecast_daily_o3,
                               :forecast_daily_uvi)
 
-    response = HTTP.get("https://api.waqi.info/feed/#{station}/?token=#{ENV["AQI_TOKEN"]}")
+    before_response = HTTP.get("http://api.waqi.info/search/?token=#{ENV["AQI_TOKEN"]}&keyword=#{station}")
+    station_uid = JSON.parse(before_response)["data"][0]["uid"]
+
+    response = HTTP.get("https://api.waqi.info/feed/@#{station_uid}/?token=#{ENV["AQI_TOKEN"]}")
     json = JSON.parse(response)["data"]
 
     if json == "Unknown station"
