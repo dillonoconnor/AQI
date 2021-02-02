@@ -84,5 +84,5 @@ test:
 production:
   <<: *default
   database: AQI_production
-  username: AQI
-  password: <%= ENV['AQI_DATABASE_PASSWORD'] %>
+  username: dillon
+  password: ENV["AQI_DATABASE_PASSWORD"]
