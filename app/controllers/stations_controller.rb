@@ -2,10 +2,6 @@ class StationsController < ApplicationController
 
   def index
     @station = Station.new
-    if params[:station]
-      @station_matches = params[:station]
-    end
-    @stations = Station.all
     @states = State.all
   end
 
@@ -48,7 +44,7 @@ class StationsController < ApplicationController
   private
 
     def set_station_name
-      if params[:station][:station_name].nil?
+      if params[:station_name]
         params[:station_name]
       else
         params[:station][:station_name]
